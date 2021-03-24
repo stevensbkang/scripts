@@ -5,9 +5,9 @@ New-NetFirewallRule -DisplayName 'Allow Swarm UDP' -Direction Inbound -Action Al
 ## Initialise Docker Swarm mode
 docker swarm init --advertise-addr 10.0.1.11 --default-addr-pool 10.0.1.0/23
 
-## Initial Configuration of SSH Server
+## Configuration of SSH Server
+Add-WindowsCapability -Online -Name (Get-WindowsCapability -Online -Name 'OpenSSH.Server*').Name
 Start-Service sshd
 Set-Service -Name sshd -StartupType 'Automatic'
 Get-NetFirewallRule -Name *ssh*
 New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
-Add-WindowsCapability -Online -Name (Get-WindowsCapability -Online -Name 'OpenSSH.Server*').Name
