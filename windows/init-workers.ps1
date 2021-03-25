@@ -9,6 +9,6 @@ New-NetFirewallRule -DisplayName "Allow Swarm UDP" -Direction Inbound -Action Al
 
 curl https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe -o plink.exe
 $finger_print = (((.\plink.exe -v -batch 10.0.1.11) 2>&1)[9] -split " ")[2]
-$token = .\plink.exe local_admin@10.0.1.11 -pw $credentials -hostkey $finger_print -batch 'docker swarm join-token worker -q' 2>&1 
+$token = .\plink.exe local_admin@10.0.1.11 -pw $credentials -hostkey $finger_print -batch docker swarm join-token -q worker
 
 docker swarm join --token $token 10.0.1.11:2377
