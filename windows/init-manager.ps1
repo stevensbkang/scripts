@@ -19,12 +19,13 @@ Get-NetFirewallRule -Name *ssh*
 New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
 
 ## Install Portainer on Swarm
+docker volume create portainer_data
 docker service create `
   --name portainer `
   --publish 9000:9000 `
   --publish 8000:8000 `
   --replicas=1 `
   --constraint 'node.role == manager' `
-  --mount type=bind,src=//path/on/host/data,dst=/data `
+  --mount type=volume,source=portainer_data,destination=/data `
   $portainer_image
   
