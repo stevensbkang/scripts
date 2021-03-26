@@ -11,3 +11,10 @@ Start-Service sshd
 Set-Service -Name sshd -StartupType 'Automatic'
 Get-NetFirewallRule -Name *ssh*
 New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
+
+## Install Portainer on Swarm
+curl https://downloads.portainer.io/portainer_windows_stack.yml -o portainer_windows_stack.yml
+docker stack deploy --compose-file=portainer_windows_stack.yml portainer
+
+## Clean-up
+rm -force .\portainer_windows_stack.yml
