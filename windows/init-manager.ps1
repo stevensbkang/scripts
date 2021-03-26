@@ -26,5 +26,5 @@ docker service create `
   --publish 8000:8000 `
   --replicas=1 `
   --constraint 'node.role == manager' `
-  --mount type=volume,source=portainer_data,destination=C:/data `
+  --mount 'type=volume,source=portainer_data,destination=C:/data' `
   $portainer_image
