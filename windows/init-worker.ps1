@@ -9,7 +9,7 @@ New-NetFirewallRule -DisplayName "Allow Swarm UDP" -Direction Inbound -Action Al
 
 curl https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe -o plink.exe
 $finger_print_execution = '((.\plink.exe -batch 10.0.1.11) 2>&1)'
-$finger_print = ((Invoke-Expression $finger_print_execution) -match "ssh-ed25519 255" -split " ")[2]
+$finger_print = (((Invoke-Expression $finger_print_execution) -match "^ssh-") -split " ")[2]
 
 Write-Host "Finger print is: $($finger_print)"
 
