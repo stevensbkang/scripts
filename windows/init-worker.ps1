@@ -20,7 +20,7 @@ Set-Location $ENV:TMP
 curl https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe -o plink.exe
 $finger_print = (((.\plink.exe -v -batch 10.0.1.11) 2>&1)[9] -split " ")[2]
 
-$finger_print | Out-File temp.txt
+$finger_print | Out-File "$ENV:TMP\temp.txt"
 
 # $token = .\plink.exe local_admin@10.0.1.11 -pw $credentials -hostkey $finger_print -batch docker swarm join-token -q worker
 
