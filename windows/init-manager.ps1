@@ -19,9 +19,6 @@ Set-Service -Name sshd -StartupType 'Automatic'
 Get-NetFirewallRule -Name *ssh*
 New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
 
-Write-Host "agent: $portainer_environment_is_agent"
-Write-Host "edge: $portainer_environment_is_edge"
-
 ## Install Portainer on Swarm
 if ( $portainer_environment_is_agent ) {
   docker volume create portainer_data
