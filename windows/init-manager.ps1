@@ -1,8 +1,8 @@
 param(
-  [string] $portainer_image,
-  [string] $portainer_agent_image,
-  [bool] $portainer_environment_is_agent,
-  [bool] $portainer_environment_is_edge
+  $portainer_image,
+  $portainer_agent_image,
+  $portainer_environment_is_agent,
+  $portainer_environment_is_edge
 )
 
 ## Open Firewall for Docker Swarm mode Initialisation
