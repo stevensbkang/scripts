@@ -2,7 +2,7 @@ param(
   [string]
   $portainer_image
   [string]
-  $portainer_image
+  $portainer_agent_image
   [bool]
   $portainer_environment_is_agent
   [bool]
