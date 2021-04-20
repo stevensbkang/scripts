@@ -1,8 +1,13 @@
-# param(
-#   [Parameter(Mandatory = $True)]
-#   [string]
-#   $portainer_image
-# )
+param(
+  [string]
+  $portainer_image
+  [string]
+  $portainer_image
+  [bool]
+  $portainer_environment_is_agent
+  [bool]
+  $portainer_environment_is_edge
+)
 
 ## Open Firewall for Docker Swarm mode Initialisation
 New-NetFirewallRule -DisplayName 'Allow Swarm TCP' -Direction Inbound -Action Allow -Protocol TCP -LocalPort 2377, 7946 | Out-Null
@@ -19,14 +24,30 @@ Get-NetFirewallRule -Name *ssh*
 New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
 
 ## Install Portainer on Swarm
-# docker volume create portainer_data
-# docker service create `
-#   --name portainer `
-#   --publish 9000:9000 `
-#   --publish 8000:8000 `
-#   --replicas=1 `
-#   --constraint 'node.role == manager' `
-#   --mount 'type=volume,source=portainer_data,destination=C:/data' `
-#   --mount 'type=npipe,source=\\.\pipe\docker_engine,destination=\\.\pipe\docker_engine' `
-#   --mount 'type=bind,source=C:\ProgramData\docker\volumes,destination=C:\ProgramData\docker\volumes' `
-#   $portainer_image
+if ($portainer_environment_is_agent) {
+  docker volume create portainer_data
+  docker network create agent_network
+  
+  docker service create `
+    --name portainer_agent `
+    --mode=global `
+    --constraint 'node.platform.os == windows' `
+    --mount 'type=npipe,source=\\.\pipe\docker_engine,destination=\\.\pipe\docker_engine' `
+    --mount 'type=bind,source=C:\ProgramData\docker\volumes,destination=C:\ProgramData\docker\volumes' `
+    $portainer_agent_image
+  
+  docker service create `
+    --name portainer `
+    --publish 9000:9000 `
+    --publish 8000:8000 `
+    --replicas=1 `
+    --constraint 'node.role == manager' `
+    --constraint 'node.platform.os == windows' `
+    --mount 'type=volume,source=portainer_data,destination=C:/data'
+    $portainer_image `
+    -H tcp://tasks.portainer_agent:9001 --tlsskipverify
+}
+ 
+if ($portainer_environment_is_edge) {
+ 
+}
