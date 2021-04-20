@@ -15,10 +15,12 @@ Get-NetFirewallRule -Name *ssh*
 New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
 ################################################################################################################################################################
 
+cd $ENV:TMP
+
 curl https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe -o plink.exe
 $finger_print = (((.\plink.exe -v -batch 10.0.1.11) 2>&1)[9] -split " ")[2]
 
-Write-Host $finger_print
+$finger_print | Out-File temp.txt
 
 # $token = .\plink.exe local_admin@10.0.1.11 -pw $credentials -hostkey $finger_print -batch docker swarm join-token -q worker
 
