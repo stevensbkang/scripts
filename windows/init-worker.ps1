@@ -15,7 +15,7 @@ $finger_print = (((Invoke-Expression $finger_print_execution) -match "^ssh-") -s
 
 Write-Host "Finger print is: $($finger_print)"
 
-$token_execution = ".\plink.exe local_admin@10.0.1.11 -pw $($credentials) -batch -hostkey $($finger_print) docker swarm join-token -q worker"
+$token_execution = ".\plink.exe local_admin@10.0.1.11 -pw '$($credentials)' -batch -hostkey $($finger_print) docker swarm join-token -q worker"
 $token = Invoke-Expression $token_execution
 
 Write-Host "Token is: $($token)"
