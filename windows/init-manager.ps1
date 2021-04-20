@@ -22,11 +22,12 @@ New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled Tru
 ## Install Portainer on Swarm
 if ($portainer_environment_is_agent) {
   docker volume create portainer_data
-  docker network create agent_network
+  docker network create portainer_agent_network
   
   docker service create `
     --name portainer_agent `
     --mode=global `
+    --network=portainer_agent_network `
     --constraint 'node.platform.os == windows' `
     --mount 'type=npipe,source=\\.\pipe\docker_engine,destination=\\.\pipe\docker_engine' `
     --mount 'type=bind,source=C:\ProgramData\docker\volumes,destination=C:\ProgramData\docker\volumes' `
@@ -37,10 +38,12 @@ if ($portainer_environment_is_agent) {
     --publish 9000:9000 `
     --publish 8000:8000 `
     --replicas=1 `
+    --network=portainer_agent_network `
     --constraint 'node.role == manager' `
     --constraint 'node.platform.os == windows' `
     --mount 'type=volume,source=portainer_data,destination=C:/data'
-    $portainer_image -H "tcp://tasks.portainer_agent:9001" --tlsskipverify
+    $portainer_image 
+# -H "tcp://tasks.portainer_agent:9001" --tlsskipverify
 }
  
 if ($portainer_environment_is_edge) {
