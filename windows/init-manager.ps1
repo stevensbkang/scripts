@@ -40,8 +40,7 @@ if ($portainer_environment_is_agent) {
     --constraint 'node.role == manager' `
     --constraint 'node.platform.os == windows' `
     --mount 'type=volume,source=portainer_data,destination=C:/data'
-    $portainer_image `
-    -H tcp://tasks.portainer_agent:9001 --tlsskipverify
+    $portainer_image -H tcp://tasks.portainer_agent:9001 --tlsskipverify
 }
  
 if ($portainer_environment_is_edge) {
