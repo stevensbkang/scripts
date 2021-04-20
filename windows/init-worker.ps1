@@ -16,7 +16,7 @@ New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled Tru
 
 curl https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe -o plink.exe
 
-$token_execution = "cmd.exe /c echo y | ./plink.exe 10.0.1.11 -batch -P 22 -l local_admin -pw '$credentials' docker swarm join-token -q worker"
+$token_execution = "cmd.exe /c echo y | ./plink.exe 10.0.1.11 -P 22 -l local_admin -pw '$credentials' docker swarm join-token -q worker"
 Invoke-Expression $token_execution
 $token = Invoke-Expression $token_execution
 
