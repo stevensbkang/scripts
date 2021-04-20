@@ -23,7 +23,7 @@ Write-Host "agent: $portainer_environment_is_agent"
 Write-Host "edge: $portainer_environment_is_edge"
 
 ## Install Portainer on Swarm
-if ( ($portainer_environment_is_agent -eq "1") -and ($portainer_environment_is_edge -eq "0") ) {
+if ( $portainer_environment_is_agent ) {
   docker volume create portainer_data
   docker network create -d overlay portainer_agent_network
   
@@ -46,6 +46,6 @@ if ( ($portainer_environment_is_agent -eq "1") -and ($portainer_environment_is_e
     --constraint 'node.platform.os == windows' `
     --mount 'type=volume,source=portainer_data,destination=C:/data' `
     $portainer_image -H "tcp://tasks.portainer_agent:9001" --tlsskipverify
-} elseif ( ($portainer_environment_is_agent -eq "0") -and ($portainer_environment_is_edge -eq "1") ) {
+} elseif ( $portainer_environment_is_edge ) {
 
 }
