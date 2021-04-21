@@ -11,12 +11,12 @@ $plink_execution = "curl https://the.earth.li/~sgtatham/putty/latest/w64/plink.e
 Invoke-Expression $plink_execution
 
 $token_execution = "cmd.exe /c echo y | ./plink.exe 10.0.1.11 -P 22 -l local_admin -pw '$credentials' docker swarm join-token -q worker"
-# Invoke-Expression $token_execution | Out-Null
+Invoke-Expression $token_execution | Out-Null
 
-# $token = Invoke-Expression $token_execution
+$token = Invoke-Expression $token_execution
 
-# Write-Host "Token is $($token)"
+Write-Host "Token is $($token)"
 
-#if ($token) {
-#  docker swarm join --token $token 10.0.1.11:2377
-#}
+if ($token) {
+  docker swarm join --token $token 10.0.1.11:2377
+}
