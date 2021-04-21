@@ -13,4 +13,4 @@ docker run -d -p 9000:9000 `
   --mount 'type=npipe,source=\\.\pipe\docker_engine,destination=\\.\pipe\docker_engine' `
   --mount 'type=bind,source=C:\ProgramData\docker\volumes,destination=C:\ProgramData\docker\volumes' `
   --mount 'type=volume,source=portainer_data,destination=C:/data' `
-  $portainer_image  
+  $portainer_image
