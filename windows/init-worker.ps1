@@ -5,8 +5,8 @@ param(
 )
 
 ## Fix for Docker Swarm Network
-Install-Module PSWindowsUpdate -Force -Confirm:$false
-Get-WindowsUpdate -Install -AutoReboot:$false -ForceDownload -Confirm:$false
+# Install-Module PSWindowsUpdate -Force -Confirm:$false
+# Get-WindowsUpdate -Install -AutoReboot:$false -ForceDownload -Confirm:$false
 
 New-NetFirewallRule -DisplayName "Allow Swarm TCP" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 2377, 7946 | Out-Null
 New-NetFirewallRule -DisplayName "Allow Swarm UDP" -Direction Inbound -Action Allow -Protocol UDP -LocalPort 4789, 7946 | Out-Null
