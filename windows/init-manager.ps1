@@ -6,8 +6,8 @@ param(
 )
 
 ## Fix for Docker Swarm Network
-Install-Module PSWindowsUpdate -Force -Confirm:$false
-Get-WindowsUpdate -Install -AutoReboot:$false -ForceDownload -Confirm:$false
+# Install-Module PSWindowsUpdate -Force -Confirm:$false
+# Get-WindowsUpdate -Install -AutoReboot:$false -ForceDownload -Confirm:$false
 
 ## Open Firewall for Docker Swarm mode Initialisation
 New-NetFirewallRule -DisplayName 'Allow Swarm TCP' -Direction Inbound -Action Allow -Protocol TCP -LocalPort 2377, 7946 | Out-Null
@@ -47,6 +47,7 @@ if ( $portainer_environment_is_agent ) {
     --constraint 'node.platform.os == windows' `
     --mount 'type=volume,source=portainer_data,destination=C:/data' `
     $portainer_image -H "tcp://tasks.portainer_agent:9001" --tlsskipverify    
+    
 } elseif ( $portainer_environment_is_edge ) {
 
 }
