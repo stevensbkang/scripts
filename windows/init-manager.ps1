@@ -7,8 +7,7 @@ param(
 
 ## Fix for Docker Swarm Network
 Install-Module PSWindowsUpdate -Force -Confirm:$false
-
-wusa /install /kb:4580390
+Get-WindowsUpdate -Install -AutoReboot:$false -ForceDownload -Confirm:$false
 
 ## Open Firewall for Docker Swarm mode Initialisation
 New-NetFirewallRule -DisplayName 'Allow Swarm TCP' -Direction Inbound -Action Allow -Protocol TCP -LocalPort 2377, 7946 | Out-Null
