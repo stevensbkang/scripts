@@ -7,8 +7,8 @@ param(
 # Get-WindowsUpdate -Install -AutoReboot:$false -ForceDownload -Confirm:$false
 
 docker volume create portainer_data
-docker run -d -p 9000:9000 `
-  --name portainer `
+docker run --name portainer -d `
+  -p 9000:9000 `  
   --restart always `
   --mount 'type=npipe,source=\\.\pipe\docker_engine,destination=\\.\pipe\docker_engine' `
   --mount 'type=bind,source=C:\ProgramData\docker\volumes,destination=C:\ProgramData\docker\volumes' `
