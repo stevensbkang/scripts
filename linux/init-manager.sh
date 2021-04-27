@@ -2,6 +2,7 @@ portainer_image=$1
 portainer_agent_image=$2
 portainer_environment_is_agent=$3
 portainer_environment_is_edge=$4
+portainer_admin_password=$5
 
 ## Install Docker CE
 sudo apt-get -y remove docker docker-engine docker.io containerd runc
@@ -25,7 +26,7 @@ if [ "${portainer_environment_is_agent}" ]; then
   sudo docker volume create portainer_data
   sudo docker network create --driver overlay --attachable portainer_agent_network
   
-  echo -n '1nTegr@tion' | sudo docker secret create portainer-pass -
+  echo -n $portainer_admin_password | sudo docker secret create portainer-pass -
   
   sudo docker service create \
     --name portainer_agent \
