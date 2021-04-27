@@ -1,4 +1,5 @@
 portainer_image=$1
+portainer_admin_password=$2
 
 sudo apt-get -y remove docker docker-engine docker.io containerd runc
 sudo apt-get -y update
@@ -13,7 +14,7 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 sudo usermod -aG docker local_admin
 
-echo -n '1nTegr@tion' > /tmp/portainer_password
+echo -n $portainer_admin_password > /tmp/portainer_password
 
 sudo docker volume create portainer_data
 sudo docker run -d -p 8000:8000 -p 9000:9000 \
