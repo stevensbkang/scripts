@@ -51,7 +51,9 @@ if ( $portainer_environment_is_agent ) {
     --constraint 'node.platform.os == windows' `
     --mount 'type=volume,source=portainer_data,destination=C:/data' `
     --mount 'type=bind,source=C:\Temp,destination=C:/Temp' `
-    $portainer_image --admin-password-file 'C:C:/Temp/portainer_admin_password.txt' -H "tcp://tasks.portainer_agent:9001" --tlsskipverify    
+    $portainer_image -H "tcp://tasks.portainer_agent:9001" --tlsskipverify
+    
+    ## --admin-password-file 'C:/Temp/portainer_admin_password.txt' 
     
 } elseif ( $portainer_environment_is_edge ) {
 
