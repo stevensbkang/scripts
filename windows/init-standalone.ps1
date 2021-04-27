@@ -19,4 +19,6 @@ docker run --name portainer -d -p 9000:9000 --restart always `
   --mount 'type=bind,source=C:\ProgramData\docker\volumes,destination=C:\ProgramData\docker\volumes' `
   --mount 'type=volume,source=portainer_data,destination=C:/data' `
   --mount 'type=bind,source=C:\Temp,destination=C:/Temp' `
-  $portainer_image --admin-password-file "C:/Temp/portainer_admin_password.txt"
+  $portainer_image
+  
+## --admin-password-file "C:/Temp/portainer_admin_password.txt"
