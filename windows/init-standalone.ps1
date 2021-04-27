@@ -12,7 +12,6 @@ New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled Tru
 
 ## Deploy standalone Portainer instance
 mkdir C:\Temp
-$portainer_admin_password = "portainer_admin_password"
 echo $portainer_admin_password > C:/Temp/portainer_password.txt
 
 docker run --name portainer -d -p 9000:9000 --restart always `
