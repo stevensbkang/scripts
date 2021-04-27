@@ -25,6 +25,8 @@ if [ "${portainer_environment_is_agent}" ]; then
   sudo docker volume create portainer_data
   sudo docker network create --driver overlay --attachable portainer_agent_network
   
+  echo -n '1nTegr@tion' | sudo docker secret create portainer-pass -
+  
   sudo docker service create \
     --name portainer_agent \
     --network portainer_agent_network \
@@ -41,7 +43,10 @@ if [ "${portainer_environment_is_agent}" ]; then
     --publish 8000:8000 \
     --replicas=1 \
     --constraint 'node.role == manager' \
-    $portainer_image -H "tcp://tasks.portainer_agent:9001" --tlsskipverify    
+    $portainer_image \
+    --admin-password-file '/run/secrets/portainer-pass' \
+    -H "tcp://tasks.portainer_agent:9001" --tlsskipverify
+
 elif [ "${portainer_environment_is_edge}" ]; then
   echo "Hello World"
 fi
