@@ -2,7 +2,8 @@ param(
   $portainer_image,
   $portainer_agent_image,
   $portainer_environment_is_agent,
-  $portainer_environment_is_edge
+  $portainer_environment_is_edge,
+  $portainer_admin_password
 )
 
 ## Fix for Docker Swarm Network
@@ -28,6 +29,8 @@ if ( $portainer_environment_is_agent ) {
   docker volume create portainer_data
   docker network create -d overlay portainer_agent_network
   
+  echo $portainer_admin_password > C:\programdata\docker\volumes\portainer_data\_data\portainer_password.txt
+  
   docker service create `
     --name portainer_agent `
     --mode=global `
@@ -46,7 +49,9 @@ if ( $portainer_environment_is_agent ) {
     --constraint 'node.role == manager' `
     --constraint 'node.platform.os == windows' `
     --mount 'type=volume,source=portainer_data,destination=C:/data' `
-    $portainer_image -H "tcp://tasks.portainer_agent:9001" --tlsskipverify    
+    $portainer_image `
+    --admin-password-file 'C:/data/portainer_admin_password' `
+    -H "tcp://tasks.portainer_agent:9001" --tlsskipverify    
     
 } elseif ( $portainer_environment_is_edge ) {
 
