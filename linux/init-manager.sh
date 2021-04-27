@@ -21,12 +21,13 @@ sudo usermod -aG docker local_admin
 ## Initialise Docker Swarm mode
 sudo docker swarm init --advertise-addr 10.0.1.11 --default-addr-pool 10.0.1.0/23
 
+## Initialise Portainer environment
+sudo docker volume create portainer_data
+sudo docker network create --driver overlay --attachable portainer_agent_network  
+echo -n $portainer_admin_password > /tmp/portainer_admin_password
+
 ## Install Portainer on Swarm
 if [ "${portainer_environment_is_agent}" ]; then
-  sudo docker volume create portainer_data
-  sudo docker network create --driver overlay --attachable portainer_agent_network
-  
-  echo -n $portainer_admin_password | sudo docker secret create portainer-pass -
   
   sudo docker service create \
     --name portainer_agent \
@@ -44,8 +45,9 @@ if [ "${portainer_environment_is_agent}" ]; then
     --publish 8000:8000 \
     --replicas=1 \
     --constraint 'node.role == manager' \
+    --mount type=bind,src=//tmp/portainer_admin_password,dst=/tmp/portainer_admin_password \
     $portainer_image \
-    --admin-password-file '/run/secrets/portainer-pass' \
+    --admin-password-file /tmp/portainer_admin_password \
     -H "tcp://tasks.portainer_agent:9001" --tlsskipverify
 
 elif [ "${portainer_environment_is_edge}" ]; then
