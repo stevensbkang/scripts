@@ -24,12 +24,13 @@ Set-Service -Name sshd -StartupType 'Automatic'
 Get-NetFirewallRule -Name *ssh*
 New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
 
+mkdir C:\Temp
+echo $portainer_admin_password > C:/Temp/portainer_admin_password.txt
+
 ## Install Portainer on Swarm
 if ( $portainer_environment_is_agent ) {
   docker volume create portainer_data
   docker network create -d overlay portainer_agent_network
-  
-  echo $portainer_admin_password > C:\programdata\docker\volumes\portainer_data\_data\portainer_password.txt
   
   docker service create `
     --name portainer_agent `
@@ -49,9 +50,8 @@ if ( $portainer_environment_is_agent ) {
     --constraint 'node.role == manager' `
     --constraint 'node.platform.os == windows' `
     --mount 'type=volume,source=portainer_data,destination=C:/data' `
-    $portainer_image `
-    --admin-password-file 'C:/data/portainer_admin_password.txt' `
-    -H "tcp://tasks.portainer_agent:9001" --tlsskipverify    
+    --mount 'type=bind,source=C:\Temp,destination=C:/Temp' `
+    $portainer_image --admin-password-file 'C:C:/Temp/portainer_admin_password.txt' -H "tcp://tasks.portainer_agent:9001" --tlsskipverify    
     
 } elseif ( $portainer_environment_is_edge ) {
 
