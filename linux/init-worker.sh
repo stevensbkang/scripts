@@ -1,16 +1,16 @@
 credentials=$1
 
 ## Install Docker CE
-sudo apt-get -y update
-sudo apt-get -y install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg \
-    lsb-release
+# sudo apt-get -y update
+# sudo apt-get -y install \
+#     apt-transport-https \
+#     ca-certificates \
+#     curl \
+#     gnupg \
+#     lsb-release
 
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
+# curl -fsSL https://get.docker.com -o get-docker.sh
+# sudo sh get-docker.sh
 sudo usermod -aG docker local_admin
 
 ## Install Putty tools for plink
