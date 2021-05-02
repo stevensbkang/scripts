@@ -12,8 +12,8 @@ portainer_admin_password=$2
     
 # curl -fsSL https://get.docker.com -o get-docker.sh
 # sudo sh get-docker.sh
-# sudo usermod -aG docker local_admin
 
+sudo usermod -aG docker local_admin
 echo -n $portainer_admin_password > /tmp/portainer_password
 
 sudo docker volume create portainer_data
