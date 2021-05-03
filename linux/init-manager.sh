@@ -58,6 +58,7 @@ elif [ "${portainer_environment_is_edge}" ]; then
     --publish 8000:8000 \
     --replicas=1 \
     --constraint 'node.role == manager' \
+    --mount type=bind,src=//var/run/docker.sock,dst=/var/run/docker.sock \
     --mount type=bind,src=//tmp/portainer_admin_password,dst=/tmp/portainer_admin_password \
     --mount type=bind,src=//var/lib/docker/volumes,dst=/var/lib/docker/volumes \
     $portainer_image \
