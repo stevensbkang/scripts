@@ -1,6 +1,7 @@
 param(
   [Parameter(Mandatory = $True)]
-  [string] $registration_token
+  [string] $registration_token,
+  [string] $vhd_location
 )
 
 curl https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RWrmXv -o desktop_agent.msi
@@ -16,4 +17,4 @@ Start-Process -Wait -FilePath ".\FSLogix\x64\Release\FSLogixAppsSetup.exe" -Argu
 
 New-Item –Path "HKLM:\SOFTWARE\FSLogix" –Name "Profiles"
 New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "Enabled" -Value "1" -PropertyType "DWORD"
-New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "VHDLocations" -Value "\\saflxpocdemocps.file.core.windows.net\fslogix" -PropertyType "MultiString"
+New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "VHDLocations" -Value $vhd_location -PropertyType "MultiString"
