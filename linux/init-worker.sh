@@ -11,7 +11,7 @@ credentials=$1
 
 # curl -fsSL https://get.docker.com -o get-docker.sh
 # sudo sh get-docker.sh
-sudo usermod -aG docker local_admin
+# sudo usermod -aG docker local_admin
 
 ## Install Putty tools for plink
 sudo apt-get install -y putty-tools
