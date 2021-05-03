@@ -15,7 +15,7 @@ elif [ "${portainer_environment_is_edge}" ]; then
   ## Grab the Edge Key once the endpoint is deployed
   edge_key=$(http --form POST http://10.0.1.11:9000/api/endpoints \
     "Authorization: Bearer ${portainer_jwt}" \
-    Name="edge-agent" EndpointCreationType=4 | jq .EdgeKey | sed 's/\"//g')
+    Name="edge-agent" EndpointCreationType=4 URL="http://10.0.1.11:9000" | jq .EdgeKey | sed 's/\"//g')
     
   ## Generate a random UUID for the Edge deployment
   edge_uuid=$(uuidgen)
