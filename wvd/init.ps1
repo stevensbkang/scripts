@@ -15,6 +15,6 @@ curl https://go.microsoft.com/fwlink/?linkid=2084562 -o FSLogix.zip
 Expand-Archive .\FSLogix.zip
 Start-Process -Wait -FilePath ".\FSLogix\x64\Release\FSLogixAppsSetup.exe" -ArgumentList "/install", "/quiet"
 
-New-Item –Path "HKLM:\SOFTWARE\FSLogix" –Name Profiles
+New-Item –Path "HKLM:\SOFTWARE\FSLogix" –Name "Profiles"
 New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "Enabled" -Value "1" -PropertyType "DWORD"
 New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "VHDLocations" -Value "\\sapocdemocps.file.core.windows.net\fslogix" -PropertyType "MultiString"
