@@ -4,11 +4,6 @@ portainer_environment_is_agent=$3
 portainer_environment_is_edge=$4
 portainer_admin_password=$5
 
-echo "Agent: "
-echo $portainer_environment_is_agent
-echo "Edge: "
-echo $portainer_environment_is_edge
-
 if [ $portainer_environment_is_agent = 'true' ]; then
   ## Leverage SSH to grab the Swarm join token
   echo y | plink 10.0.1.11 -P 22 -l local_admin -pw $credentials hostname
