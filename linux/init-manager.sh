@@ -13,7 +13,7 @@ sudo docker network create --driver overlay --attachable portainer_agent_network
 echo -n $portainer_admin_password > /tmp/portainer_admin_password
 
 ## Install Portainer on Swarm
-if [ $portainer_environment_is_agent = 'true' ]; then
+if [ $portainer_environment_is_agent == 'true' ]; then
   
   sudo docker service create \
     --name portainer_agent \
@@ -36,7 +36,7 @@ if [ $portainer_environment_is_agent = 'true' ]; then
     --admin-password-file /tmp/portainer_admin_password \
     -H "tcp://tasks.portainer_agent:9001" --tlsskipverify
 
-elif [ $portainer_environment_is_edge = 'true' ]; then
+elif [ $portainer_environment_is_edge == 'true' ]; then
   sudo docker service create \
     --name portainer \
     --publish 9000:9000 \
