@@ -4,7 +4,9 @@ portainer_environment_is_agent=$3
 portainer_environment_is_edge=$4
 portainer_admin_password=$5
 
+echo "Agent: "
 echo $portainer_environment_is_agent
+echo "Edge: "
 echo $portainer_environment_is_edge
 
 if [ "${portainer_environment_is_agent}" ]; then
