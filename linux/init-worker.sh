@@ -1,7 +1,8 @@
 credentials=$1
-portainer_environment_is_agent=$2
-portainer_environment_is_edge=$3
-portainer_admin_password=$4
+portainer_agent_image=$2
+portainer_environment_is_agent=$3
+portainer_environment_is_edge=$4
+portainer_admin_password=$5
 
 if [ "${portainer_environment_is_agent}" ]; then
   echo y | plink 10.0.1.11 -P 22 -l local_admin -pw $credentials hostname
@@ -19,7 +20,7 @@ elif [ "${portainer_environment_is_edge}" ]; then
   ## Generate a random UUID for the Edge deployment
   edge_uuid=$(uuidgen)
   
-  docker run -d \
+  sudo docker run -d \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /var/lib/docker/volumes:/var/lib/docker/volumes \
     -v /:/host \
@@ -30,5 +31,5 @@ elif [ "${portainer_environment_is_edge}" ]; then
     -e EDGE_KEY=$edge_key \
     -e CAP_HOST_MANAGEMENT=1 \
     --name portainer_edge_agent \
-    portainer/agent
+    $portainer_agent_image
 fi
