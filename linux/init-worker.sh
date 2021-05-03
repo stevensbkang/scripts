@@ -17,11 +17,12 @@ elif [ $portainer_environment_is_edge = 'true' ]; then
   ip_address=$(hostname -I | cut -d ' ' -f 1)
   
   ## Generate Portainer JWT via Authentication
-  portainer_jwt=$(http POST http://10.0.1.11:9000/api/auth Username="admin" Password="${portainer_admin_password}" | jq .jwt | sed 's/\"//g')    
+  portainer_jwt=$(http POST http://10.0.1.11:9000/api/auth Username="admin" Password="${portainer_admin_password}" | jq .jwt | sed 's/\"//g')
   
-  ## Grab the Edge Key once the endpoint is deployed
-  edge_key=$(http --form POST http://10.0.1.11:9000/api/endpoints "Authorization: Bearer ${portainer_jwt}" Name="edge-${ip_address}" EndpointCreationType=4 URL="http://10.0.1.11:9000" | jq .EdgeKey | sed 's/\"//g')
-    
+  ## Deploy and grab the Edge Key once the endpoint is deployed
+  http --form POST http://10.0.1.11:9000/api/endpoints "Authorization: Bearer ${portainer_jwt}" Name="edge-${ip_address}" EndpointCreationType=4 URL="http://10.0.1.11:9000"
+  sleep 5
+  edge_key=http GET http://10.0.1.11:9000/api/endpoints "Authorization: Bearer ${portainer_jwt}" | jq '.[] | select(.Name=="edge-${ip_address}") | .EdgeKey' | sed 's/\"//g'
   ## Generate a random UUID for the Edge deployment
   edge_uuid=$(uuidgen)
   
