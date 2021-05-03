@@ -20,6 +20,7 @@ elif [ "${portainer_environment_is_edge}" ]; then
   ## Generate a random UUID for the Edge deployment
   edge_uuid=$(uuidgen)
   
+  ## Deploy Edge  
   sudo docker run -d \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /var/lib/docker/volumes:/var/lib/docker/volumes \
