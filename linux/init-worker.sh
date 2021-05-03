@@ -4,7 +4,7 @@ portainer_environment_is_agent=$3
 portainer_environment_is_edge=$4
 portainer_admin_password=$5
 
-if [ $portainer_environment_is_agent == 'true' ]; then
+if [ $portainer_environment_is_agent = 'true' ]; then
   ## Leverage SSH to grab the Swarm join token
   echo y | plink 10.0.1.11 -P 22 -l local_admin -pw $credentials hostname
   token=$(echo y | plink 10.0.1.11 -P 22 -l local_admin -pw $credentials sudo docker swarm join-token -q worker)
@@ -12,7 +12,7 @@ if [ $portainer_environment_is_agent == 'true' ]; then
   ## Join Swarm manager with the token above
   sudo docker swarm join --token $token 10.0.1.11:2377
   
-elif [ $portainer_environment_is_edge == 'true' ]; then
+elif [ $portainer_environment_is_edge = 'true' ]; then
   ## Get the current IP address
   ip_address=$(hostname -I | cut -d ' ' -f 1)
   
