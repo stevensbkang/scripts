@@ -52,5 +52,14 @@ if [ "${portainer_environment_is_agent}" ]; then
     -H "tcp://tasks.portainer_agent:9001" --tlsskipverify
 
 elif [ "${portainer_environment_is_edge}" ]; then
-  echo "Hello World"
+  sudo docker service create \
+    --name portainer \
+    --publish 9000:9000 \
+    --publish 8000:8000 \
+    --replicas=1 \
+    --constraint 'node.role == manager' \
+    --mount type=bind,src=//tmp/portainer_admin_password,dst=/tmp/portainer_admin_password \
+    --mount type=bind,src=//var/lib/docker/volumes,dst=/var/lib/docker/volumes \
+    $portainer_image \
+    --admin-password-file /tmp/portainer_admin_password
 fi
