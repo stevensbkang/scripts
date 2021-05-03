@@ -17,7 +17,7 @@ portainer_admin_password=$5
 # curl -fsSL https://get.docker.com -o get-docker.sh
 # sudo sh get-docker.sh
 
-sudo usermod -aG docker local_admin
+# sudo usermod -aG docker local_admin
 
 ## Initialise Docker Swarm mode
 sudo docker swarm init --advertise-addr 10.0.1.11 --default-addr-pool 10.0.1.0/23
