@@ -1,19 +1,9 @@
 portainer_image=$1
 portainer_admin_password=$2
 
-# sudo apt-get -y remove docker docker-engine docker.io containerd runc
-# sudo apt-get -y update
-# sudo apt-get -y install \
-#     apt-transport-https \
-#     ca-certificates \
-#     curl \
-#     gnupg \
-#     lsb-release
-    
-# curl -fsSL https://get.docker.com -o get-docker.sh
-# sudo sh get-docker.sh
-
+## Add local_admin account to the docker group
 sudo usermod -aG docker local_admin
+
 echo -n $portainer_admin_password > /tmp/portainer_password
 
 sudo docker volume create portainer_data
