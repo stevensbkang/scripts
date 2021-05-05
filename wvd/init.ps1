@@ -18,3 +18,5 @@ Start-Process -Wait -FilePath ".\FSLogix\x64\Release\FSLogixAppsSetup.exe" -Argu
 New-Item –Path "HKLM:\SOFTWARE\FSLogix" –Name "Profiles"
 New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "Enabled" -Value "1" -PropertyType "DWORD"
 New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "VHDLocations" -Value $vhd_location -PropertyType "MultiString"
+New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "PreventLoginWithFailure" -Value "1" -PropertyType "DWORD"
+New-ItemProperty -Path "HKLM:\SOFTWARE\FSLogix\Profiles" -Name "PreventLoginWithTempProfile" -Value "1" -PropertyType "DWORD"
