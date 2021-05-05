@@ -10,15 +10,19 @@ Set-Service -Name sshd -StartupType 'Automatic'
 Get-NetFirewallRule -Name *ssh*
 New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
 
-## Deploy standalone Portainer instance
-mkdir C:\Temp
-echo $portainer_admin_password > C:/Temp/portainer_admin_password.txt
-
 docker run --name portainer -d -p 9000:9000 --restart always `
   --mount 'type=npipe,source=\\.\pipe\docker_engine,destination=\\.\pipe\docker_engine' `
   --mount 'type=bind,source=C:\ProgramData\docker\volumes,destination=C:\ProgramData\docker\volumes' `
   --mount 'type=volume,source=portainer_data,destination=C:/data' `
   --mount 'type=bind,source=C:\Temp,destination=C:/Temp' `
   $portainer_image
+
+## Body for Portainer Admin password  
+$credential_body = @{
+  username = "admin"
+  password = $portainer_admin_password
+} | ConvertTo-Json
   
-## --admin-password-file "C:/Temp/portainer_admin_password.txt"
+## Set Portainer admin password
+Start-Sleep 10 
+Invoke-RestMethod -Uri http://10.0.1.11:9000/api/users/admin/init -Headers -ContentType "application/json" -Method POST -Body $credential_body
