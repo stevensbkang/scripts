@@ -56,5 +56,18 @@ if ( $portainer_environment_is_agent ) {
     ## --admin-password-file 'C:/Temp/portainer_admin_password.txt' 
     
 } elseif ( $portainer_environment_is_edge ) {
-
+  docker volume create portainer_data
+  docker network create -d overlay portainer_agent_network
+  
+  docker service create `
+    --name portainer `
+    --publish 9000:9000 `
+    --publish 8000:8000 `
+    --replicas=1 `
+    --network=portainer_agent_network `
+    --constraint 'node.role == manager' `
+    --mount 'type=npipe,source=\\.\pipe\docker_engine,destination=\\.\pipe\docker_engine' `
+    --mount 'type=bind,source=C:\ProgramData\docker\volumes,destination=C:\ProgramData\docker\volumes' `
+    --mount 'type=volume,source=portainer_data,destination=C:/data' `
+    $portainer_image
 }
