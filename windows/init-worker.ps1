@@ -4,10 +4,6 @@ param(
   $credentials
 )
 
-## Fix for Docker Swarm Network
-# Install-Module PSWindowsUpdate -Force -Confirm:$false
-# Get-WindowsUpdate -Install -AutoReboot:$false -ForceDownload -Confirm:$false
-
 New-NetFirewallRule -DisplayName "Allow Swarm TCP" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 2377, 7946 | Out-Null
 New-NetFirewallRule -DisplayName "Allow Swarm UDP" -Direction Inbound -Action Allow -Protocol UDP -LocalPort 4789, 7946 | Out-Null
 
@@ -18,8 +14,6 @@ $token_execution = "cmd.exe /c echo y | ./plink.exe 10.0.1.11 -P 22 -l local_adm
 Invoke-Expression $token_execution | Out-Null
 
 $token = Invoke-Expression $token_execution
-
-Write-Host "Token is $($token)"
 
 if ($token) {
   docker swarm join --token $token 10.0.1.11:2377
