@@ -6,17 +6,6 @@ param(
   $portainer_admin_password
 )
 
-## Fix for Docker Swarm Network
-# Install-Module PSWindowsUpdate -Force -Confirm:$false
-# Get-WindowsUpdate -Install -AutoReboot:$false -ForceDownload -Confirm:$false
-
-## Open Firewall for Docker Swarm mode Initialisation
-New-NetFirewallRule -DisplayName 'Allow Swarm TCP' -Direction Inbound -Action Allow -Protocol TCP -LocalPort 2377, 7946 | Out-Null
-New-NetFirewallRule -DisplayName 'Allow Swarm UDP' -Direction Inbound -Action Allow -Protocol UDP -LocalPort 4789, 7946 | Out-Null
-
-## Initialise Docker Swarm mode
-docker swarm init --advertise-addr 10.0.1.11 --default-addr-pool 10.0.1.0/23
-
 ## Configuration of SSH Server
 Add-WindowsCapability -Online -Name (Get-WindowsCapability -Online -Name 'OpenSSH.Server*').Name
 Start-Service sshd
@@ -24,11 +13,21 @@ Set-Service -Name sshd -StartupType 'Automatic'
 Get-NetFirewallRule -Name *ssh*
 New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
 
-mkdir C:\Temp
-echo $portainer_admin_password > C:/Temp/portainer_admin_password.txt
+## Body for Portainer Admin password  
+$credential_body = @{
+  username = "admin"
+  password = $portainer_admin_password
+} | ConvertTo-Json
 
 ## Install Portainer on Swarm
 if ( $portainer_environment_is_agent ) {
+  ## Open Firewall for Docker Swarm mode Initialisation
+  New-NetFirewallRule -DisplayName 'Allow Swarm TCP' -Direction Inbound -Action Allow -Protocol TCP -LocalPort 2377, 7946 | Out-Null
+  New-NetFirewallRule -DisplayName 'Allow Swarm UDP' -Direction Inbound -Action Allow -Protocol UDP -LocalPort 4789, 7946 | Out-Null
+
+  ## Initialise Docker Swarm mode
+  docker swarm init --advertise-addr 10.0.1.11 --default-addr-pool 10.0.1.0/23
+  
   docker volume create portainer_data
   docker network create -d overlay portainer_agent_network
   
@@ -52,22 +51,22 @@ if ( $portainer_environment_is_agent ) {
     --mount 'type=volume,source=portainer_data,destination=C:/data' `
     --mount 'type=bind,source=C:\Temp,destination=C:/Temp' `
     $portainer_image -H "tcp://tasks.portainer_agent:9001" --tlsskipverify
-    
-    ## --admin-password-file 'C:/Temp/portainer_admin_password.txt' 
-    
+  
+  ## Set Portainer admin password
+  Start-Sleep 10 
+  Invoke-RestMethod -Uri http://10.0.1.11:9000/api/users/admin/init -Headers -ContentType "application/json" -Method POST -Body $credential_body
+  
 } elseif ( $portainer_environment_is_edge ) {
   docker volume create portainer_data
-  docker network create -d overlay portainer_agent_network
-  
-  docker service create `
-    --name portainer `
-    --publish 9000:9000 `
-    --publish 8000:8000 `
-    --replicas=1 `
-    --network=portainer_agent_network `
-    --constraint 'node.role == manager' `
+    
+  docker run --name portainer -d -p 9000:9000 --restart always `
     --mount 'type=npipe,source=\\.\pipe\docker_engine,destination=\\.\pipe\docker_engine' `
     --mount 'type=bind,source=C:\ProgramData\docker\volumes,destination=C:\ProgramData\docker\volumes' `
     --mount 'type=volume,source=portainer_data,destination=C:/data' `
+    --mount 'type=bind,source=C:\Temp,destination=C:/Temp' `
     $portainer_image
+  
+  ## Set Portainer admin password
+  Start-Sleep 10 
+  Invoke-RestMethod -Uri http://10.0.1.11:9000/api/users/admin/init -Headers -ContentType "application/json" -Method POST -Body $credential_body  
 }
