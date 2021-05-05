@@ -4,6 +4,9 @@ portainer_environment_is_agent=$3
 portainer_environment_is_edge=$4
 portainer_admin_password=$5
 
+## Add local_admin account to the docker group
+sudo usermod -aG docker local_admin
+
 ## Initialise Docker Swarm mode
 sudo docker swarm init --advertise-addr 10.0.1.11 --default-addr-pool 10.0.1.0/23
 
