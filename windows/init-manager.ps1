@@ -62,7 +62,6 @@ if ( $portainer_environment_is_agent ) {
     --mount 'type=npipe,source=\\.\pipe\docker_engine,destination=\\.\pipe\docker_engine' `
     --mount 'type=bind,source=C:\ProgramData\docker\volumes,destination=C:\ProgramData\docker\volumes' `
     --mount 'type=volume,source=portainer_data,destination=C:/data' `
-    --mount 'type=bind,source=C:\Temp,destination=C:/Temp' `
     $portainer_image
   
   ## Set Portainer admin password
