@@ -26,10 +26,10 @@ if ( $portainer_environment_is_agent ) {
   New-NetFirewallRule -DisplayName 'Allow Swarm UDP' -Direction Inbound -Action Allow -Protocol UDP -LocalPort 4789, 7946 | Out-Null
 
   ## Initialise Docker Swarm mode
-  docker swarm init --advertise-addr 10.0.1.11 --default-addr-pool 10.0.1.0/23
+  docker swarm init --advertise-addr 10.0.1.11 --listen-addr 10.0.1.11:2377 --default-addr-pool 10.0.1.0/23
   
   docker volume create portainer_data
-  docker network create -d overlay portainer_agent_network
+  docker network create -d overlay portainer_agent_network --subnet 192.168.0.0/24
   
   docker service create `
     --name portainer_agent `
