@@ -11,6 +11,9 @@ spec:
       protocol: TCP
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.port }}
+      {{- if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort))) }}
+      nodePort: {{ .Values.service.nodePort}}
+      {{- end }}
   selector:
     {{- include "agent.selectorLabels" . | nindent 4 }}
 ---
