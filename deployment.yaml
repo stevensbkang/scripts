@@ -27,7 +27,7 @@ metadata:
 spec:
   type: NodePort
   selector:
-    app: portainer-demo
+    app: portainer-demo-broken
   ports:
   - nodePort: 30080
     port: 80
